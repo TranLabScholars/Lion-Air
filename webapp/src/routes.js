@@ -6,7 +6,7 @@ import {
   MdPerson,
   MdHome,
   MdLock,
-  MdOutlineShoppingCart,
+  MdOutlineShoppingCart, MdLocationPin, MdAdd,
 } from 'react-icons/md';
 
 // Admin Imports
@@ -21,11 +21,34 @@ import SignInCentered from 'views/auth/signIn';
 
 const routes = [
   {
-    name: 'Main Dashboard',
+    name: 'Dashboard',
     layout: '/admin',
     path: '/default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
     component: <MainDashboard />,
+  },
+  {
+    name: 'My sensors',
+    layout: '/admin',
+    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
+    path: '/data-tables',
+    component: <DataTables />,
+  },
+
+  {
+    name: 'Map',
+    layout: '/admin',
+    icon: <Icon as={MdLocationPin} width="20px" height="20px" color="inherit" />,
+    path: '/data-tables',
+    component: <DataTables />,
+  },
+
+  {
+    name: 'Add a sensor',
+    layout: '/admin',
+    icon: <Icon as={MdAdd} width="20px" height="20px" color="inherit" />,
+    path: '/data-tables',
+    component: <DataTables />,
   },
   {
     name: 'NFT Marketplace',
@@ -42,13 +65,7 @@ const routes = [
     component: <NFTMarketplace />,
     secondary: true,
   },
-  {
-    name: 'Data Tables',
-    layout: '/admin',
-    icon: <Icon as={MdBarChart} width="20px" height="20px" color="inherit" />,
-    path: '/data-tables',
-    component: <DataTables />,
-  },
+
   {
     name: 'Profile',
     layout: '/admin',
@@ -64,7 +81,7 @@ const routes = [
     component: <SignInCentered />,
   },
   {
-    name: 'RTL Admin',
+    name: 'All sensors',
     layout: '/rtl',
     path: '/rtl-default',
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
