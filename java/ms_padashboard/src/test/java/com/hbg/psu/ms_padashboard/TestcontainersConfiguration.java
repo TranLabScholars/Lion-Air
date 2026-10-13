@@ -9,10 +9,10 @@ import org.testcontainers.utility.DockerImageName;
 @TestConfiguration(proxyBeanMethods = false)
 class TestcontainersConfiguration {
 
-	@Bean
-	@ServiceConnection
-	MSSQLServerContainer sqlServerContainer() {
-		return new MSSQLServerContainer(DockerImageName.parse("mcr.microsoft.com/mssql/server:latest"));
-	}
+//	@Bean
+//	@ServiceConnection
+//	MSSQLServerContainer sqlServerContainer() {
+//		return new MSSQLServerContainer(DockerImageName.parse("mcr.microsoft.com/mssql/server:latest"));
+//	}
 
 }

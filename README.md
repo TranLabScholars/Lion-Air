@@ -24,7 +24,7 @@ here.</a>
 ### Prerequisites
 - Node.js LTS 24.1.0
 - React 19.3.0
-- JDK 21.0.3
+- JDK 25.0.4.1
 
 ### Quick Start
 
