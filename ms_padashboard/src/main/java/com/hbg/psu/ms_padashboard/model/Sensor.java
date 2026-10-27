@@ -9,7 +9,7 @@ import java.time.Instant;
 @Data
 public class Sensor {
     @Id
-    String sensorId;
+    String id;
 
     @Column(name="sensorName", nullable = false)
     private String sensorName;
