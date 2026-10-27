@@ -143,7 +143,7 @@ export default function HeaderLinks(props) {
               borderRadius="8px"
               mb="10px"
             >
-              <ItemContent info="Horizon UI Dashboard PRO" />
+              <ItemContent info="Purple Air Dashboard" />
             </MenuItem>
             <MenuItem
               _hover={{ bg: 'none' }}

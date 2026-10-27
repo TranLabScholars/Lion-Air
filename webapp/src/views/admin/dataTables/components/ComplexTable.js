@@ -77,18 +77,18 @@ export default function ComplexTable(props) {
             h="24px"
             me="5px"
             color={
-              info.getValue() === 'Approved'
+              info.getValue() === 'Online'
                 ? 'green.500'
-                : info.getValue() === 'Disable'
+                : info.getValue() === 'Inactive'
                 ? 'red.500'
                 : info.getValue() === 'Error'
                 ? 'orange.500'
                 : null
             }
             as={
-              info.getValue() === 'Approved'
+              info.getValue() === 'Online'
                 ? MdCheckCircle
-                : info.getValue() === 'Disable'
+                : info.getValue() === 'Inactive'
                 ? MdCancel
                 : info.getValue() === 'Error'
                 ? MdOutlineError
@@ -101,8 +101,8 @@ export default function ComplexTable(props) {
         </Flex>
       ),
     }),
-    columnHelper.accessor('date', {
-      id: 'date',
+    columnHelper.accessor('location', {
+      id: 'location',
       header: () => (
         <Text
           justifyContent="space-between"
@@ -110,7 +110,7 @@ export default function ComplexTable(props) {
           fontSize={{ sm: '10px', lg: '12px' }}
           color="gray.400"
         >
-          DATE
+          LOCATION
         </Text>
       ),
       cell: (info) => (
@@ -119,8 +119,8 @@ export default function ComplexTable(props) {
         </Text>
       ),
     }),
-    columnHelper.accessor('progress', {
-      id: 'progress',
+    columnHelper.accessor('aqi', {
+      id: 'aqi',
       header: () => (
         <Text
           justifyContent="space-between"
@@ -128,7 +128,7 @@ export default function ComplexTable(props) {
           fontSize={{ sm: '10px', lg: '12px' }}
           color="gray.400"
         >
-          PROGRESS
+          AQI
         </Text>
       ),
       cell: (info) => (
