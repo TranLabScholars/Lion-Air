@@ -31,8 +31,6 @@ import {
   SimpleGrid,
   useColorModeValue,
 } from "@chakra-ui/react";
-// Assets
-import Usa from "assets/img/dashboards/usa.png";
 // Custom components
 import MiniCalendar from "components/calendar/MiniCalendar";
 import MiniStatistics from "components/card/MiniStatistics";
@@ -97,27 +95,7 @@ export default function UserReports() {
         {/*  value='$642.39'*/}
         {/*/>*/}
         <MiniStatistics growth='+23%' name='Average AQI' value='40' />
-        {/*<MiniStatistics*/}
-        {/*  endContent={*/}
-        {/*    <Flex me='-16px' mt='10px'>*/}
-        {/*      <FormLabel htmlFor='balance'>*/}
-        {/*        <Avatar src={Usa} />*/}
-        {/*      </FormLabel>*/}
-        {/*      <Select*/}
-        {/*        id='balance'*/}
-        {/*        variant='mini'*/}
-        {/*        mt='5px'*/}
-        {/*        me='0px'*/}
-        {/*        defaultValue='usd'>*/}
-        {/*        <option value='usd'>USD</option>*/}
-        {/*        <option value='eur'>EUR</option>*/}
-        {/*        <option value='gba'>GBA</option>*/}
-        {/*      </Select>*/}
-        {/*    </Flex>*/}
-        {/*  }*/}
-        {/*  name='Your balance'*/}
-        {/*  value='$1,000'*/}
-        {/*/>*/}
+
         <MiniStatistics
           startContent={
             <IconBox

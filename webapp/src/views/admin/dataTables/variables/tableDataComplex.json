@@ -13,7 +13,7 @@
   },
   {
     "name":"Sensor 3",
-    "status": "Error",
+    "status": "Inactive",
     "location": "Olmsted Basement",
     "aqi": 90
   }

@@ -44,9 +44,6 @@ Then run this command to start your local server:
 ```bash
 # Start backend server
 bash build-run.sh
-
-# Start webapp
-# npm start
 ```
 
 ### Ports
