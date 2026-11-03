@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SensorRepository extends JpaRepository<Sensor,Integer> {
+public interface SensorRepository extends JpaRepository<Sensor,String> {
     public List<Sensor> findAllSensor();
+    public Sensor save(Sensor sensor);
     public Sensor findSensorById(String id);
 }

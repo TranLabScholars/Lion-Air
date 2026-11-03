@@ -1,8 +1,10 @@
 package com.hbg.psu.ms_padashboard.controller;
 
 import com.hbg.psu.ms_padashboard.model.Sensor;
+import com.hbg.psu.ms_padashboard.repository.SensorRepository;
 import com.hbg.psu.ms_padashboard.service.SensorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
