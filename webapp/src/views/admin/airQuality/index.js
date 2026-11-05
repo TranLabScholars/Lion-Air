@@ -37,17 +37,19 @@ export default function AirQualityDashboard() {
       grid: { borderColor: colorMode === 'dark' ? '#2b3674' : '#e9edf7' },
     },
   }), [history, colorMode]);
-
+  const displayName = sensor.name || current?.name || `Sensor ${sensor.sensorIndex}`;
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
       <Flex justify="space-between" align="flex-start" wrap="wrap" gap="12px" mb="20px">
-        {/*<Box>*/}
-        {/*  <Heading size="lg">Purple Air Dashboard</Heading>*/}
-        {/*  <Text color="secondaryGray.600" mt="4px">*/}
-        {/*  <Text color="secondaryGray.600" mt="4px">*/}
-        {/*    {current ? `${current.name} · sensor ${current.index} · updated ${timeAgo(current.lastSeen)}` : `Sensor ${sensor.sensorIndex}`}*/}
-        {/*  </Text>*/}
-        {/*</Box>*/}
+        <Box>
+          <Heading size="lg">Purple Air Dashboard</Heading>
+          <Text color="secondaryGray.600" mt="4px">
+          <Text color="secondaryGray.600" mt="4px">
+            {current
+              ? `${displayName}${sensor.location ? ` · ${sensor.location}` : ''} · sensor ${current.index} · updated ${timeAgo(current.lastSeen)}`
+              : `Sensor ${sensor.sensorIndex}`} </Text>
+          </Text>
+        </Box>
         <Button leftIcon={<MdRefresh />} onClick={refresh} isLoading={loading} colorScheme="purple" variant="outline">
           Refresh
         </Button>
