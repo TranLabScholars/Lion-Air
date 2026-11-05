@@ -7,7 +7,7 @@ export const SENSOR_INDEX = process.env.REACT_APP_SENSOR_INDEX;
 
 // Only needed for PRIVATE sensors. Leave empty for public ones.
 export const SENSOR_READ_KEY = process.env.REACT_APP_SENSOR_READ_KEY;
-
+export const SENSOR_LOCATION = process.env.REACT_APP_SENSOR_LOCATION || '';
 // PurpleAir READ API key (https://develop.purpleair.com).
 // Put it in a .env file as REACT_APP_PURPLEAIR_API_KEY=xxxx and restart `npm start`.
 // NOTE: anything in a React app is visible in the browser, so this is fine for a

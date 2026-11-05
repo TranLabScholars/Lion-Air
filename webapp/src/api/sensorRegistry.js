@@ -1,4 +1,4 @@
-import { BACKEND_URL, SENSOR_INDEX, SENSOR_READ_KEY } from 'config/purpleair';
+import { BACKEND_URL, SENSOR_INDEX, SENSOR_READ_KEY, SENSOR_LOCATION } from 'config/purpleair';
 
 const LIST_KEY = 'purpleair.sensors';
 const ACTIVE_KEY = 'purpleair.activeSensor';
@@ -21,8 +21,7 @@ export function setActiveSensor(sensorIndex) {
 
 // The sensor the dashboard/map show: last one chosen by the user, else config default.
 export function getActiveSensor() {
-  const fallback = { sensorIndex: SENSOR_INDEX, readKey: SENSOR_READ_KEY, name: 'Default sensor' };
-  try {
+  const fallback = { sensorIndex: SENSOR_INDEX, readKey: SENSOR_READ_KEY, name: '', location: SENSOR_LOCATION };  try {
     const active = Number(localStorage.getItem(ACTIVE_KEY));
     return getSensors().find((s) => s.sensorIndex === active) || fallback;
   } catch (e) { return fallback; }
