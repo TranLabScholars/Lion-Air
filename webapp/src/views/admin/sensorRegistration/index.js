@@ -32,37 +32,58 @@ export default function SensorRegistration() {
   const submit = async (ev) => {
     ev.preventDefault();
     if (!validate()) return;
+
     setSubmitting(true);
+
     try {
-      // 1. Make sure PurpleAir actually knows this sensor.
+      // 1. Verify that PurpleAir knows this sensor.
       await fetchSensor(form.sensorIndex.trim(), form.readKey.trim());
-      // 2. Save locally and send to the backend (when configured).
-      const { backendOk } = await registerSensor({
-        ...form,
-        name: form.name.trim(),
-        location: form.location.trim(),
-        readKey: form.readKey.trim(),
+
+      // 2. Send sensor information to Spring Boot.
+      const response = await fetch('http://localhost:8080/api/v1/sensors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sensorName: form.name.trim(),
+          location: form.location.trim(),
+          sensorIndex: form.sensorIndex.trim(),
+          // readKey: form.readKey.trim(),
+        }),
       });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage || 'Failed to save sensor to backend.');
+      }
+
+      // 3. Notify user of success.
       toast({
         title: 'Sensor added',
-        description: backendOk === false
-          ? `${form.name} is saved in this browser, but the backend did not respond.`
-          : `${form.name} is now your dashboard sensor.`,
-        status: backendOk === false ? 'warning' : 'success',
+        description: `${form.name} has been successfully registered!`,
+        status: 'success',
         duration: 4000,
       });
+
       navigate('/admin/my-sensors');
+
     } catch (err) {
       setErrors({ sensorIndex: err.message });
-      toast({ title: 'Could not add sensor', description: err.message, status: 'error', duration: 5000 });
+
+      toast({
+        title: 'Could not add sensor',
+        description: err.message,
+        status: 'error',
+        duration: 5000,
+      });
+
     } finally {
       setSubmitting(false);
     }
   };
-
   return (
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
-      <Heading size="lg" mb="4px">Add a sensor</Heading>
       <Text color="secondaryGray.600" mb="20px">
         Register a PurpleAir sensor to track it on your dashboard.
       </Text>
@@ -111,9 +132,6 @@ export default function SensorRegistration() {
           <Button type="submit" colorScheme="purple" mt="24px" isLoading={submitting} loadingText="Checking sensor">
             Add sensor
           </Button>
-          <Text fontSize="xs" color="secondaryGray.600" mt="12px">
-            {BACKEND_URL ? `Also sent to ${BACKEND_URL}/api/sensors/register` : 'Saved in this browser. Set REACT_APP_BACKEND_URL to also send it to your backend.'}
-          </Text>
         </form>
       </Panel>
     </Box>

@@ -42,7 +42,7 @@ export default function AirQualityDashboard() {
     <Box pt={{ base: '130px', md: '80px', xl: '80px' }}>
       <Flex justify="space-between" align="flex-start" wrap="wrap" gap="12px" mb="20px">
         <Box>
-          <Heading size="lg">Purple Air Dashboard</Heading>
+          {/*<Heading size="lg">All sensors</Heading>*/}
           <Text color="secondaryGray.600" mt="4px">
           <Text color="secondaryGray.600" mt="4px">
             {current
