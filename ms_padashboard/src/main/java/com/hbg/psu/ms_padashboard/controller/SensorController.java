@@ -12,6 +12,10 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/sensors")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://localhost:3000"
+})
 public class SensorController {
     private final SensorService sensorService;
 
@@ -22,9 +26,9 @@ public class SensorController {
     }
 
     // Remove a sensor
-    @PutMapping("/{id}")
-    public ResponseEntity<Optional<Sensor>> update(@PathVariable String id) {
-        return ResponseEntity.ok(sensorService.removeSensor(id));
+    @PutMapping("/{sensorIndex}")
+    public ResponseEntity<Optional<Sensor>> update(@PathVariable String sensorIndex) {
+        return ResponseEntity.ok(sensorService.removeSensor(sensorIndex));
     }
 
     // Retrieve sensor list

@@ -108,20 +108,7 @@ export default function UserReports() {
           name='Total Active Sensors'
           value='1'
         />
-        {/*<MiniStatistics*/}
-        {/*  startContent={*/}
-        {/*    <IconBox*/}
-        {/*      w='56px'*/}
-        {/*      h='56px'*/}
-        {/*      bg={boxBg}*/}
-        {/*      icon={*/}
-        {/*        <Icon w='32px' h='32px' as={MdFileCopy} color={brandColor} />*/}
-        {/*      }*/}
-        {/*    />*/}
-        {/*  }*/}
-        {/*  name='Total Projects'*/}
-        {/*  value='2935'*/}
-        {/*/>*/}
+
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap='20px' mb='20px'>

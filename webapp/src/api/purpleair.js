@@ -1,4 +1,4 @@
-import {API_BASE, API_KEY, SENSOR_INDEX, USE_MOCK} from 'config/purpleair';
+import { API_BASE, API_KEY, USE_MOCK } from 'config/purpleair';
 
 const CURRENT_FIELDS = [
   'name', 'latitude', 'longitude', 'last_seen',
@@ -7,12 +7,12 @@ const CURRENT_FIELDS = [
   'pm2.5_10minute', 'pm2.5_60minute', 'pm2.5_24hour',
 ].join(',');
 
-async function request(path, params = {}) {
+async function request(path, params = {}, { text = false } = {}) {
   const url = new URL(`${API_BASE}${path}`);
   Object.entries(params).forEach(([k, v]) => {
     if (v !== undefined && v !== null && v !== '') url.searchParams.set(k, v);
   });
-  const res = await fetch(url.toString(), { headers: { 'X-API-key': API_KEY } });
+  const res = await fetch(url.toString(), { headers: { 'X-API-Key': API_KEY } });
   if (!res.ok) {
     let detail = '';
     try { detail = (await res.json()).description || ''; } catch (e) { /* ignore */ }
@@ -20,7 +20,7 @@ async function request(path, params = {}) {
     if (res.status === 404) throw new Error(`Sensor not found. ${detail}`);
     throw new Error(`PurpleAir error ${res.status}. ${detail}`);
   }
-  return res.json();
+  return text ? res.text() : res.json();
 }
 
 // ── Simulated data (used automatically when there is no API key) ──────────
@@ -62,14 +62,13 @@ function mockHistory(index) {
     return { t: t * 1000, pm25: Number(mockPm(index, t).toFixed(1)) };
   });
 }
+
 // ── Public API ─────────────────────────────────────────────────────────────
 export async function fetchSensor(index, readKey) {
-  console.log('[purpleair] fetchSensor called', index, 'mock?', USE_MOCK);
   if (USE_MOCK) { await wait(350); return mockCurrent(index); }
   const { sensor: s } = await request(`/sensors/${index}`, { fields: CURRENT_FIELDS, read_key: readKey });
   const st = s.stats || {};
   const avg = (k) => st[k] ?? s[k];
-  console.log('[purpleair] raw sensor', s);
 
   return {
     index: s.sensor_index,
@@ -88,7 +87,7 @@ export async function fetchSensor(index, readKey) {
     pressure: s.pressure,
   };
 }
-// Last 24h, hourly averages (averages channel A and B).
+
 // Last 24h, hourly averages (averages channel A and B).
 export async function fetchHistory(index, readKey) {
   if (USE_MOCK) { await wait(450); return mockHistory(index); }
@@ -134,5 +133,36 @@ export async function fetchHistory(index, readKey) {
     .map(([t, { sum, n }]) => ({ t, pm25: Number((sum / n).toFixed(1)) }));
 }
 
-console.log(SENSOR_INDEX)
-console.log('[purpleair] key loaded:', !!API_KEY, '| USE_MOCK:', USE_MOCK);
+// Columns in the CSV. These are PurpleAir history field names.
+export const CSV_FIELDS = [
+  'pm1.0_atm_a', 'pm1.0_atm_b',
+  'pm2.5_atm_a', 'pm2.5_atm_b',
+  'pm10.0_atm_a', 'pm10.0_atm_b',
+  'humidity_a', 'temperature_a', 'pressure_a',
+];
+
+// Returns the raw CSV text for one sensor (hourly averages by default).
+export async function fetchHistoryCsv(index, readKey, { hours = 24, average = 60 } = {}) {
+  if (USE_MOCK) {
+    await wait(300);
+    const now = Math.floor(Date.now() / 1000);
+    const rows = Array.from({ length: hours }, (_, k) => {
+      const t = now - (hours - 1 - k) * 3600;
+      const pm = mockPm(index, t);
+      return [t, ...CSV_FIELDS.map((f, i) => (f.startsWith('pm') ? (pm * (1 + (i % 2) * 0.05)).toFixed(1) : '0'))].join(',');
+    });
+    return ['time_stamp', ...CSV_FIELDS].join(',') + '\n' + rows.join('\n');
+  }
+  const end = Math.floor(Date.now() / 1000);
+  return request(
+    `/sensors/${index}/history/csv`,
+    {
+      fields: CSV_FIELDS.join(','),
+      average,
+      start_timestamp: end - hours * 3600,
+      end_timestamp: end,
+      read_key: readKey,
+    },
+    { text: true },
+  );
+}

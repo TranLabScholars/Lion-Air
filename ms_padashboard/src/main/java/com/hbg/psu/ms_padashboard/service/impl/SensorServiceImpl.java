@@ -3,6 +3,7 @@ package com.hbg.psu.ms_padashboard.service.impl;
 import com.hbg.psu.ms_padashboard.model.Sensor;
 import com.hbg.psu.ms_padashboard.repository.SensorRepository;
 import com.hbg.psu.ms_padashboard.service.SensorService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,37 +19,27 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Sensor createSensor(Sensor sensorInfo){
         //Check if a sensor with the same name doesn't exist already
-        Optional<Sensor> existingSensor= sensorRepository.findById(sensorInfo.getId());
+        Optional<Sensor> existingSensor= sensorRepository.findById(sensorInfo.getSensorIndex());
 
         //Map sensor to request
-        if(existingSensor.isPresent()){
-            return existingSensor.get();
-        } else {
-        Sensor saved = sensorRepository.save(sensorInfo);
-        return saved;
-        }
+        return existingSensor.orElseGet(() -> sensorRepository.save(sensorInfo));
 
     }
 
     // Remove a sensor
     @Override
-    public Optional<Sensor> removeSensor(String id){
-        //Check if sensor exists
-        Optional<Sensor> existingSensor= sensorRepository.findById(id);
-
-        if(existingSensor.isPresent()){
-            Sensor sensor = existingSensor.get();
-            sensor.setStatus("Deleted");
-            sensorRepository.save(sensor);
-        }
-        return sensorRepository.findById(id);
+    @Transactional
+    public Optional<Sensor> removeSensor(String sensorIndex) {
+        Optional<Sensor> existing = sensorRepository.findBySensorIndex(sensorIndex);
+        existing.ifPresent(sensorRepository::delete);
+        return existing; // the deleted sensor, or empty if it didn't exist
     }
 
     // Retrieve sensor list
     @Override
     public List<Sensor> findAll() {
         // Return all sensors with active status
-        return sensorRepository.findByStatus("Active");
+        return sensorRepository.findAll();
     }
 
     // Retrieve one sensor
