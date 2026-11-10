@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MsPadashboardApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MsPadashboardApplication.class, args);
+        SpringApplication.run(MsPadashboardApplication.class, args);
 	}
 
 }

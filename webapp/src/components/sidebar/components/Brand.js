@@ -1,20 +1,19 @@
-import React from "react";
+import React from 'react';
+import { Flex, Icon, Text, Divider, useColorModeValue } from '@chakra-ui/react';
+import { MdCloud } from 'react-icons/md';
 
-// Chakra imports
-import { Flex, useColorModeValue } from "@chakra-ui/react";
-
-// Custom components
-import { HorizonLogo } from "components/icons/Icons";
-import { HSeparator } from "components/separator/Separator";
-
+// Replaces the "Horizon Free" logo in the sidebar.
 export function SidebarBrand() {
-  //   Chakra color mode
-  let logoColor = useColorModeValue("navy.700", "white");
-
+  const textColor = useColorModeValue('navy.700', 'white');
   return (
-    <Flex align='center' direction='column'>
-      <HorizonLogo h='26px' w='175px' my='32px' color={logoColor} />
-      <HSeparator mb='20px' />
+    <Flex align="center" direction="column">
+      <Flex align="center" gap="10px" my="32px">
+        <Icon as={MdCloud} w="30px" h="30px" color="#6d28d9" />
+        <Text fontSize="xl" fontWeight="800" color={textColor} letterSpacing="-0.3px">
+          Lion Air Dashboard
+        </Text>
+      </Flex>
+      <Divider mb="20px" />
     </Flex>
   );
 }
