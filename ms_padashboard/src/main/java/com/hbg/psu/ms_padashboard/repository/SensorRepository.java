@@ -4,9 +4,10 @@ import com.hbg.psu.ms_padashboard.model.Sensor;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SensorRepository extends JpaRepository<Sensor,String> {
-    public List<Sensor> findAllSensor();
-    public Sensor save(Sensor sensor);
-    public Sensor findSensorById(String id);
+    List<Sensor> findByStatus(String status);
+    Optional<Sensor> findBySensorIndex(String sensorIndex);
+
 }

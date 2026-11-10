@@ -8,9 +8,9 @@
     </content>
     <orderEntry type="jdk" jdkName="25" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.48" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:7.0.10-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:4.1.2-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:4.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.projectlombok:lombok:1.18.48" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.springframework:spring-context:7.0.10-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.springframework.boot:spring-boot-autoconfigure:4.1.2-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.springframework.data:spring-data-jpa:4.1.2-SNAPSHOT" level="project" />
   </component>
 </module>

@@ -3,10 +3,11 @@ package com.hbg.psu.ms_padashboard.service;
 import com.hbg.psu.ms_padashboard.model.Sensor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SensorService {
     List<Sensor> findAll();
-    Sensor findSensorById(String id);
+    Optional<Sensor> findSensorById(String id);
     Sensor createSensor(Sensor sensor);
-    Sensor removeSensor(String id);
+    Optional<Sensor> removeSensor(String id);
 }
