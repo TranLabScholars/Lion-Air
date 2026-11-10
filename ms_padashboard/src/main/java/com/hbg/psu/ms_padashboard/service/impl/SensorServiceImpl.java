@@ -18,10 +18,9 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Sensor createSensor(Sensor sensorInfo){
         //Check if a sensor with the same name doesn't exist already
-        Optional<Sensor> existingSensor= Optional.ofNullable(sensorRepository.findSensorById(sensorInfo.getId()));
+        Optional<Sensor> existingSensor= sensorRepository.findById(sensorInfo.getId());
 
         //Map sensor to request
-
         if(existingSensor.isPresent()){
             return existingSensor.get();
         } else {
@@ -33,28 +32,29 @@ public class SensorServiceImpl implements SensorService {
 
     // Remove a sensor
     @Override
-    public Sensor removeSensor(String id){
+    public Optional<Sensor> removeSensor(String id){
         //Check if sensor exists
-        Optional<Sensor> existingSensor= Optional.ofNullable(sensorRepository.findSensorById(id));
+        Optional<Sensor> existingSensor= sensorRepository.findById(id);
 
         if(existingSensor.isPresent()){
             Sensor sensor = existingSensor.get();
-            sensor.setStatus("REMOVED");
+            sensor.setStatus("Deleted");
             sensorRepository.save(sensor);
         }
-        return sensorRepository.findSensorById(id);
+        return sensorRepository.findById(id);
     }
 
     // Retrieve sensor list
     @Override
     public List<Sensor> findAll() {
-        return sensorRepository.findAllSensor();
+        // Return all sensors with active status
+        return sensorRepository.findByStatus("Active");
     }
 
     // Retrieve one sensor
     @Override
-    public Sensor findSensorById(String id) {
-        return sensorRepository.findSensorById(id);
+    public Optional<Sensor> findSensorById(String id) {
+        return sensorRepository.findById(id);
     }
 
 }
