@@ -52,6 +52,7 @@ function consolidate(items) {
 
   return { current, history, count: loaded.length };
 }
+//Test
 
 // Picks y-axis bounds and clean tick steps from the data range.
 function niceAxis(values) {
