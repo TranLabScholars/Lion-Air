@@ -10,7 +10,7 @@ export function SidebarBrand() {
       <Flex align="center" gap="10px" my="32px">
         <Icon as={MdCloud} w="30px" h="30px" color="#6d28d9" />
         <Text fontSize="xl" fontWeight="800" color={textColor} letterSpacing="-0.3px">
-          Purple Air Dashboard
+          Lion Air Dashboard
         </Text>
       </Flex>
       <Divider mb="20px" />

@@ -5,7 +5,7 @@ import { MdHome, MdSensors, MdLocationPin, MdAdd } from 'react-icons/md';
 
 // Admin Imports
 import AirQualityDashboard from 'views/admin/airQuality';
-import MySensors from 'views/admin/mySensors';
+import MySensors from 'views/admin/sensorsList';
 import SensorMap from 'views/admin/map';
 import SensorRegistration from 'views/admin/sensorRegistration';
 
@@ -20,9 +20,9 @@ const routes = [
     component: <AirQualityDashboard />,
   },
   {
-    name: 'My sensors',
+    name: 'All sensors',
     layout: '/admin',
-    path: '/my-sensors',
+    path: '/sensors-list',
     icon: icon(MdSensors),
     component: <MySensors />,
   },
