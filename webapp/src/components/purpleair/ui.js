@@ -39,7 +39,7 @@ export function AqiPill({ aqi, category }) {
       fontSize="sm"
       fontWeight="600"
     >
-      {aqi ?? '–'} · {category.label}
+      {aqi ? `${aqi} · ` : ''}{category.label}
     </Flex>
   );
 }

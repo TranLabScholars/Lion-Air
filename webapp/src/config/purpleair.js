@@ -3,8 +3,7 @@ export const SENSOR_READ_KEY = process.env.REACT_APP_SENSOR_READ_KEY;
 export const SENSOR_LOCATION = process.env.REACT_APP_SENSOR_LOCATION || '';
 
 export const API_KEY = process.env.REACT_APP_PURPLEAIR_API_KEY || '';
-
-export const API_BASE = 'https://api.purpleair.com/v1';
+export const API_BASE = process.env.REACT_APP_API_BASE;
 
 // For sensor management
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
