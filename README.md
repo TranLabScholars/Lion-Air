@@ -8,18 +8,24 @@ view current and historical air quality measurements through an interactive inte
 
 ---
 
-## Introduction
+[//]: # (## Introduction)
 
-Designed for those who like modern UI elements and beautiful websites. Made of
-hundred of elements, designed blocks and fully coded pages, Horizon UI is ready
-to help you create stunning websites and webapps.
+[//]: # ()
+[//]: # (Designed for those who like modern UI elements and beautiful websites. Made of)
+
+[//]: # (hundred of elements, designed blocks and fully coded pages, Horizon UI is ready)
+
+[//]: # (to help you create stunning websites and webapps.)
 
 
-## Documentation
+[//]: # (## Documentation)
 
-Each element is well presented in a very complex documentation. You can read
-more about the <a href="https://horizon-ui.com/documentation/docs/introduction?ref=readme-horizon" target="_blank">documentation
-here.</a>
+[//]: # ()
+[//]: # (Each element is well presented in a very complex documentation. You can read)
+
+[//]: # (more about the <a href="https://horizon-ui.com/documentation/docs/introduction?ref=readme-horizon" target="_blank">documentation)
+
+[//]: # (here.</a>)
 
 
 
@@ -42,19 +48,19 @@ npm install
 Then run this command to start your local server:
 
 ```bash
-# Start backend server
+# Start project
 bash build-run.sh
 ```
 
 ### Ports
 | UI                   | URL                   |
 |----------------------|-----------------------|
-| Purple Air Dashboard | http://localhost:3000 | 
-| API                  | http://localhost:8080 |
-| SQL Server           | http://localhost:1433 |
+| Lion Air Dashboard | http://localhost:3000 | 
+| API Server                | http://localhost:8080 |
+| Microsoft SQL Server           | http://localhost:1433 |
 
 
-### Project Structure
+[//]: # (### Project Structure)
 
 
 

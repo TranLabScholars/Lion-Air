@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 // chakra imports
 import {
@@ -7,6 +7,8 @@ import {
   Drawer,
   DrawerBody,
   Icon,
+  IconButton,
+  Tooltip,
   useColorModeValue,
   DrawerOverlay,
   useDisclosure,
@@ -21,12 +23,66 @@ import {
 } from "components/scrollbar/Scrollbar";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import PropTypes from "prop-types";
+import { useLocation, useNavigate } from "react-router-dom";
+import { SidebarContext } from "contexts/SidebarContext";
 
 // Assets
 import { IoMenuOutline } from "react-icons/io5";
+import { MdChevronLeft, MdMenu } from "react-icons/md";
+
+const COLLAPSED_WIDTH = "80px";
+const EXPANDED_WIDTH = "300px";
+
+// Flattens nested route groups into the plain list of pages that have an icon.
+const flattenRoutes = (routes) =>
+  routes.flatMap((r) => {
+    if (r.items) return flattenRoutes(r.items);
+    return r.icon && r.layout && r.path ? [r] : [];
+  });
+
+// Icon-only navigation shown while the sidebar is collapsed.
+function CollapsedRail({ routes, onExpand }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const activeBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
+  const activeColor = useColorModeValue("brand.500", "white");
+  const idleColor = useColorModeValue("secondaryGray.600", "secondaryGray.500");
+
+  return (
+    <Flex direction='column' align='center' pt='20px' gap='8px'>
+      <Tooltip label='Expand menu' placement='right' hasArrow>
+        <IconButton
+          aria-label='Expand menu'
+          icon={<Icon as={MdMenu} boxSize='22px' />}
+          variant='ghost'
+          onClick={onExpand}
+          mb='12px'
+        />
+      </Tooltip>
+      {flattenRoutes(routes).map((r) => {
+        const to = r.layout + r.path;
+        const active = location.pathname.startsWith(to);
+        return (
+          <Tooltip key={to} label={r.name} placement='right' hasArrow>
+            <IconButton
+              aria-label={r.name}
+              aria-current={active ? "page" : undefined}
+              icon={r.icon}
+              variant='ghost'
+              bg={active ? activeBg : "transparent"}
+              color={active ? activeColor : idleColor}
+              onClick={() => navigate(to)}
+            />
+          </Tooltip>
+        );
+      })}
+    </Flex>
+  );
+}
 
 function Sidebar(props) {
   const { routes } = props;
+  const { sidebarCollapsed, setSidebarCollapsed } = useContext(SidebarContext);
 
   let variantChange = "0.2s linear";
   let shadow = useColorModeValue(
@@ -43,19 +99,42 @@ function Sidebar(props) {
       <Box
         bg={sidebarBg}
         transition={variantChange}
-        w='300px'
+        w={sidebarCollapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH}
         h='100vh'
         m={sidebarMargins}
         minH='100%'
         overflowX='hidden'
+        position='relative'
         boxShadow={shadow}>
-        <Scrollbars
-          autoHide
-          renderTrackVertical={renderTrack}
-          renderThumbVertical={renderThumb}
-          renderView={renderView}>
-          <Content routes={routes} />
-        </Scrollbars>
+        {sidebarCollapsed ? (
+          <CollapsedRail
+            routes={routes}
+            onExpand={() => setSidebarCollapsed(false)}
+          />
+        ) : (
+          <>
+            <Tooltip label='Collapse menu' placement='right' hasArrow>
+              <IconButton
+                aria-label='Collapse menu'
+                icon={<Icon as={MdChevronLeft} boxSize='22px' />}
+                variant='ghost'
+                size='sm'
+                position='absolute'
+                top='14px'
+                right='12px'
+                zIndex='2'
+                onClick={() => setSidebarCollapsed(true)}
+              />
+            </Tooltip>
+            <Scrollbars
+              autoHide
+              renderTrackVertical={renderTrack}
+              renderThumbVertical={renderThumb}
+              renderView={renderView}>
+              <Content routes={routes} />
+            </Scrollbars>
+          </>
+        )}
       </Box>
     </Box>
   );
