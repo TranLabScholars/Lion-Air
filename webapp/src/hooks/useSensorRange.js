@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
+import { fetchHistoryRange } from 'api/purpleair';
 
-const API_KEY = process.env.REACT_APP_PURPLEAIR_API_KEY;
-const API_BASE = process.env.REACT_APP_API_BASE;
+
 const DAY = 86400000;
 const TTL = 30 * 60 * 1000; // 30 minutes
-const AVERAGE_MINUTES = 360;
 
 const memory = new Map();
 const inflight = new Map();
@@ -25,16 +24,6 @@ function summarize(points) {
   };
 }
 
-function mockPoints() {
-  const now = Date.now();
-  const out = [];
-  for (let t = now - 31 * DAY; t <= now; t += AVERAGE_MINUTES * 60000) {
-    const day = (t / DAY) * 2 * Math.PI;
-    out.push({ t, pm25: Number((8 + 4 * Math.sin(day) + 3 * Math.sin(day / 7)).toFixed(1)) });
-  }
-  return out;
-}
-
 function readSession(id) {
   try {
     const raw = sessionStorage.getItem(`pa.range.${id}`);
@@ -48,35 +37,11 @@ function writeSession(id, entry) {
   try {
     sessionStorage.setItem(`pa.range.${id}`, JSON.stringify(entry));
   } catch {
-    /* storage full or unavailable: memory cache still works */
   }
 }
 
 async function requestRange(sensor) {
-  console.log(`${API_BASE}/sensors/${sensor.sensorIndex}/history`)
-  if (!API_KEY) return summarize(mockPoints());
-
-  const start = Math.floor((Date.now() - 31 * DAY) / 1000);
-  const params = new URLSearchParams({
-    fields: 'pm2.5_atm',
-    average: String(AVERAGE_MINUTES),
-    start_timestamp: String(start),
-  });
-  if (sensor.readKey) params.set('read_key', sensor.readKey);
-  const res = await fetch(
-    `${API_BASE}/sensors/${sensor.sensorIndex}/history?${params}`,
-    { headers: { 'X-API-KEY': API_KEY } },
-  );
-  if (!res.ok) throw new Error(`History request failed (${res.status})`);
-
-  const json = await res.json();
-  const col = (json.fields || []).indexOf('pm2.5_atm');
-  const tCol = (json.fields || []).indexOf('time_stamp');
-  const points = (json.data || [])
-    .map((row) => ({ t: row[tCol] * 1000, pm25: Number(row[col]) }))
-    .filter((p) => Number.isFinite(p.pm25))
-    .sort((a, b) => a.t - b.t);
-
+  const points = await fetchHistoryRange(sensor.sensorIndex, sensor.readKey);
   return summarize(points);
 }
 

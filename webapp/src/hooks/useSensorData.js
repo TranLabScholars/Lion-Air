@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchSensor, fetchHistory } from 'api/purpleair';
-import { POLL_MS, USE_MOCK } from 'config/purpleair';
+import { POLL_MS } from 'config/purpleair';
 
 export default function useSensorData(sensorIndex, readKey, { withHistory = true, pollMs = POLL_MS } = {}) {
   const [state, setState] = useState({ current: null, history: [], loading: true, error: null });
@@ -24,5 +24,5 @@ export default function useSensorData(sensorIndex, readKey, { withHistory = true
     return () => clearInterval(id);
   }, [load, pollMs]);
 
-  return { ...state, refresh: load, isMock: USE_MOCK };
+  return { ...state, refresh: load };
 }

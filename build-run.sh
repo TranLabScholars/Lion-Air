@@ -62,7 +62,8 @@ init_compose_file() {
     fail "A compose file already exists ($COMPOSE_FILE); not creating another"
   fi
   COMPOSE_FILE="$BACKEND_DIR/compose.yaml"
-  warn "Creating a starter compose.yaml (PostgreSQL). Match DB_* in .env to your Spring datasource."
+  warn "Creating a starter compose.yaml (SQL Server). Set DB_PASSWORD (and optionally DB_PORT) in .env;"
+  warn "the password must meet SQL Server complexity rules, and you still need to create your database."
   cat > "$COMPOSE_FILE" <<'YAML'
 services:
   db:
@@ -81,6 +82,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+      start_period: 20s
 
 volumes:
   db_data:
@@ -147,6 +149,14 @@ ok "Java $JAVA_MAJOR"
 # 2. Load environment variables
 # ---------------------------------------------------------------------------
 load_env
+
+# The PurpleAir key is read by the Spring backend (PURPLEAIR_API_KEY) and never by the frontend.
+if [[ -z "${PURPLEAIR_API_KEY:-}" ]]; then
+  warn "PURPLEAIR_API_KEY is not set in .env, so sensor data requests will fail"
+fi
+if [[ -n "${REACT_APP_PURPLEAIR_API_KEY:-}" ]]; then
+  warn "REACT_APP_PURPLEAIR_API_KEY is still set; remove it, it would be exposed in the browser"
+fi
 
 # ---------------------------------------------------------------------------
 # 3. Start Docker Compose (database)

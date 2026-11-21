@@ -19,25 +19,40 @@ import java.util.Optional;
 public class SensorController {
     private final SensorService sensorService;
 
-    // Add a sensor
+    /**
+     * Add a sensor to the database given the sensor index, location and type
+     * @param sensor
+     * @return sensor info
+     */
     @PostMapping
     public ResponseEntity<Sensor> save(@RequestBody Sensor sensor) {
         return ResponseEntity.ok(sensorService.createSensor(sensor));
     }
 
-    // Remove a sensor
+    /**
+     * Remove a sensor
+     * @param sensorIndex
+     * @return Sensor information
+     */
     @PutMapping("/{sensorIndex}")
     public ResponseEntity<Optional<Sensor>> update(@PathVariable String sensorIndex) {
         return ResponseEntity.ok(sensorService.removeSensor(sensorIndex));
     }
 
-    // Retrieve sensor list
+    /**
+     * Retrieve sensor list
+     * @return list of sensors
+     */
     @GetMapping
     public ResponseEntity<List<Sensor>> findAll() {
         return ResponseEntity.ok(sensorService.findAll());
     }
 
-    // Retrieve one sensor
+    /**
+     * Retrieve one sensor
+     * @param id
+     * @return sensor information
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Sensor>> findSensorById(@PathVariable String id) {
         return ResponseEntity.ok(sensorService.findSensorById(id));

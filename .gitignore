@@ -3,6 +3,8 @@ package-lock.json
 yarn.lock
 build
 out
+.idea
+.vscode
 
 # dependencies
 /node_modules
