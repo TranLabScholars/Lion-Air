@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { fetchSensors } from 'api/sensorRegistry';
 import { fetchSensor, fetchHistory } from 'api/purpleair';
-import { POLL_MS, USE_MOCK } from 'config/purpleair';
+import { POLL_MS } from 'config/purpleair';
 
-// Loads the sensor list from the backend, then live readings + 24h history
-// for every sensor from PurpleAir. One failing sensor never blocks the others.
+// Loads the sensor list from the backend, then live readings and 24h history
+// for every sensor from PurpleAir
 export default function useAllSensorData(pollMs = POLL_MS) {
   const [state, setState] = useState({ items: [], loading: true, error: null });
   const [refreshing, setRefreshing] = useState(false);
@@ -45,5 +45,5 @@ export default function useAllSensorData(pollMs = POLL_MS) {
     setRefreshing(false);
   }, [load]);
 
-  return { ...state, refresh, refreshing, isMock: USE_MOCK };
+  return { ...state, refresh, refreshing };
 }

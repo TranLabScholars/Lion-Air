@@ -1,11 +1,8 @@
-// Only needed for PRIVATE sensors
-export const SENSOR_READ_KEY = process.env.REACT_APP_SENSOR_READ_KEY;
-export const SENSOR_LOCATION = process.env.REACT_APP_SENSOR_LOCATION || '';
+// Spring backend URL (where the Purple Air key lives)
+export const BACKEND_URL = (
+  process.env.REACT_APP_BACKEND_URL
+  ?? (process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080')
+).replace(/\/+$/, '');
 
-export const API_KEY = process.env.REACT_APP_PURPLEAIR_API_KEY || '';
-export const API_BASE = process.env.REACT_APP_API_BASE;
-
-// For sensor management
-export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
-export const USE_MOCK = !API_KEY;
-export const POLL_MS = 2 * 60 * 1000;
+// Polling rate for the sensors
+export const POLL_MS = Number(process.env.REACT_APP_POLL_MS) || 60000;

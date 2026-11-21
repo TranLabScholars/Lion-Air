@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Alert, AlertIcon, Box, Button, Flex, Icon, Select, SimpleGrid, Skeleton, Text, Tooltip, useColorMode, useToast,
 } from '@chakra-ui/react';
-
+// ...
 import { saveTextFile } from 'utils/csv';
 import { MdFileDownload, MdInfoOutline, MdRefresh } from 'react-icons/md';
 import Chart from 'react-apexcharts';
@@ -23,7 +23,7 @@ const RANGES = [
   { value: '30d', label: 'Last month', title: 'month' },
 ];
 
-// Each metric is explained exactly once, the UI reuses these via <Info />
+// Each metric is explained exactly once; the UI reuses these via <Info />.
 const METRIC_INFO = {
   aqi: 'US EPA Air Quality Index, calculated from PM2.5. The colour and advice follow the category: Good (0–50) up to Hazardous (301+).',
   pm25: 'Particles up to 2.5 µm across. They reach deep into the lungs and are what the AQI is based on.',
@@ -35,7 +35,7 @@ const METRIC_INFO = {
   averages: 'Rolling PM2.5 averages over each window. The pill shows the AQI category each average would give.',
 };
 
-// US EPA AQI categories with colors for the graph
+// US EPA AQI categories. The graph plots AQI, and its background is split into these bands.
 const AQI_BANDS = [
   { from: 0, to: 50, color: '#00e400' }, // Good
   { from: 50, to: 100, color: '#e6c800' }, // Moderate
@@ -51,7 +51,7 @@ const mean = (arr) => {
   return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
 };
 
-// Averages every sensor that has data into current reading and one hourly history
+// Averages every sensor that has data into one "current" reading and one hourly history.
 function consolidate(items) {
   const loaded = items.filter((i) => i.current);
   if (!loaded.length) return { current: null, history: [], count: 0 };
@@ -87,7 +87,7 @@ function consolidate(items) {
   return { current, history, count: loaded.length };
 }
 
-// Picks y-axis bounds and an evenly spaced, detailed tick scale (steps divide the AQI band edges)
+// Picks y-axis bounds and an evenly spaced, detailed tick scale (steps divide the AQI band edges).
 const AXIS_STEPS = [1, 2, 5, 10, 20, 25, 50, 100];
 function niceAxis(values, target = 8) {
   if (!values.length) return { min: 0, max: 10, tickAmount: 5, decimals: 0 };
@@ -126,6 +126,7 @@ function AqiChart({ history, name, range = '24h', height = 220 }) {
   );
   const axis = useMemo(() => niceAxis(points.map((p) => p.aqi), height >= 240 ? 10 : 7), [points, height]);
 
+  // Evenly spaced numeric time axis: same spacing everywhere, no special midnight/date ticks.
   const xAxis = useMemo(() => {
     if (!points.length) return null;
     const min = points[0].t;
@@ -145,6 +146,7 @@ function AqiChart({ history, name, range = '24h', height = 220 }) {
   const chart = useMemo(() => {
     if (!xAxis) return null;
     const dark = colorMode === 'dark';
+    // Only the part of each band that falls inside the visible y-axis is drawn.
     const bands = AQI_BANDS
       .filter((b) => b.to > axis.min && b.from < axis.max)
       .map((b) => ({
@@ -231,7 +233,8 @@ function MetricList({ current, showInfo }) {
   ));
 }
 
-//Cell for the dashboard grid
+// One cell of the overview grid. Info icons only render on the first (average) card
+// so no explanation is repeated.
 function SensorCard({ title, subtitle, current, history, onClick, showInfo }) {
   const aqi = aqiFromPm25(current?.pm25);
   const cat = categoryFor(aqi);
@@ -268,8 +271,9 @@ function SensorCard({ title, subtitle, current, history, onClick, showInfo }) {
 }
 
 export default function AirQualityDashboard() {
-  const { items, loading, error, refresh, refreshing, isMock } = useAllSensorData();
+  const { items, loading, error, refresh, refreshing } = useAllSensorData();
 
+  // Opens on the sensor you arrived on, otherwise the one you were last viewing (survives a page refresh).
   const [selected, setSelected] = useState(() => {
     const idx = getActiveSensorIndex();
     if (idx) return String(idx);
@@ -280,6 +284,8 @@ export default function AirQualityDashboard() {
   useEffect(() => {
     try { sessionStorage.setItem(SELECTED_KEY, selected); } catch { /* ignore */ }
   }, [selected]);
+  // Leaving the dashboard (map, sensor list...) forgets the selection; a page refresh does not
+  // run this cleanup, so refreshing keeps it.
   useEffect(() => () => {
     try { sessionStorage.removeItem(SELECTED_KEY); } catch { /* ignore */ }
   }, []);
@@ -294,6 +300,7 @@ export default function AirQualityDashboard() {
   const current = picked ? picked.current : overview.current;
   const reporting = items.filter((i) => i.current).length;
 
+  // One history request per picked sensor, cached, shared by week/month tiles and graph.
   const { data: rangeData, loading: rangeLoading, error: rangeError } = useSensorRange(picked?.sensor, !!picked);
 
   const aqi = aqiFromPm25(current?.pm25);
@@ -318,6 +325,7 @@ export default function AirQualityDashboard() {
   const toast = useToast();
   const [downloading, setDownloading] = useState(false);
 
+  // The CSV endpoint takes one sensor index, so this works on a single selected sensor.
   const handleDownload = async () => {
     if (!picked) return;
     const { sensor } = picked;
@@ -339,6 +347,7 @@ export default function AirQualityDashboard() {
     }
   };
 
+  // Errors only appear once loading has finished and there is genuinely nothing to show.
   const showListError = !loading && !!error;
   const showEmpty = !loading && !error && items.length === 0;
   const showNoData = !loading && !error && items.length > 0 && !current;
@@ -416,12 +425,6 @@ export default function AirQualityDashboard() {
         </Flex>
       </Flex>
 
-      {isMock && (
-        <Alert status="info" borderRadius="12px" mb="20px">
-          <AlertIcon />
-          Showing simulated readings. Add REACT_APP_PURPLEAIR_API_KEY to your .env file to load live data.
-        </Alert>
-      )}
       {showListError && (
         <Alert status="error" borderRadius="12px" mb="20px"><AlertIcon />{error}</Alert>
       )}
@@ -442,6 +445,13 @@ export default function AirQualityDashboard() {
             ? [0, 1, 2, 3].map((k) => <Skeleton key={k} borderRadius="16px" minH="470px" />)
             : items.length > 0 && (
             <>
+              {/*<SensorCard*/}
+              {/*title="Average"*/}
+              {/*subtitle={`${reporting} of ${items.length} sensors reporting`}*/}
+              {/*current={overview.current}*/}
+              {/*history={overview.history}*/}
+              {/*showInfo*/}
+              {/*/>*/}
               {items.map((i) => (
                 <SensorCard
                   key={i.sensor.id || i.sensor.sensorIndex}

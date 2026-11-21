@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Alert, AlertIcon, Box, Button, FormControl, FormErrorMessage, FormHelperText, FormLabel,
+  Box, Button, FormControl, FormErrorMessage, FormHelperText, FormLabel,
   Input, Select, SimpleGrid, Text, useToast,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { fetchSensor } from 'api/purpleair';
 import { registerSensor } from 'api/sensorRegistry';
-import { USE_MOCK } from 'config/purpleair';
 import { Panel } from 'components/purpleair/ui';
 
 const EMPTY = { sensorName: '', sensorIndex: '', location: 'Penn State Harrisburg', sensorType: 'Indoor', readKey: '' };
@@ -66,12 +65,6 @@ export default function SensorRegistration() {
       <Text color="secondaryGray.600" mb="20px">
         Add a PurpleAir sensor to track it on the dashboard.
       </Text>
-      {USE_MOCK && (
-        <Alert status="info" borderRadius="12px" mb="20px">
-          <AlertIcon />
-          No API key set, so the sensor can't be verified against PurpleAir. It will still be saved.
-        </Alert>
-      )}
       <Panel maxW="720px">
         <form onSubmit={submit} noValidate>
           <SimpleGrid columns={{ base: 1, md: 2 }} gap="18px">
